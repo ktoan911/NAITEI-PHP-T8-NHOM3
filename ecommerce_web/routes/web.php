@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\RevenueReportController;
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'viewall'])->name('products.viewall');
@@ -64,7 +65,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Route::put('/{order}', [OrderController::class, 'update'])->name('update');
         Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
         Route::post('/{order}/status', [OrderController::class, 'updateStatus'])->name('update-status');
-
+    });
+    
+    // Revenue Report routes
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/revenue', [RevenueReportController::class, 'index'])->name('revenue.index');
+        Route::get('/revenue-data', [RevenueReportController::class, 'getReportData'])->name('revenue.data');
+        Route::post('/send-revenue-report', [RevenueReportController::class, 'sendEmailReport'])->name('revenue.email');
     });
 });
 

@@ -17,6 +17,15 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withCommands([
+        \App\Console\Commands\DailyRevenueReport::class,
+    ])
+    ->withSchedule(function ($schedule) {
+        $schedule->command('report:daily-revenue')
+            ->dailyAt('08:00')
+            ->timezone('Asia/Ho_Chi_Minh')
+            ->description('Gửi báo cáo doanh thu hàng ngày cho admin');
+    })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
